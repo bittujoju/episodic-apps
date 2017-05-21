@@ -2,10 +2,9 @@ package com.example.viewings;
 
 import com.example.shows.Show;
 import com.example.shows.ShowRepository;
+import com.example.shows.episodes.DetailedEpisode;
 import com.example.shows.episodes.Episode;
 import com.example.shows.episodes.EpisodeRepository;
-import com.example.shows.episodes.EpisodeWithTitle;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 
@@ -17,14 +16,14 @@ public class DetailedViewing {
     private Long id;
 
     private Show show;
-    private EpisodeWithTitle episode;
+    private DetailedEpisode episode;
     private Timestamp updatedAt;
     private Integer timecode;
 
     public DetailedViewing(Viewing viewing, ShowRepository showRepository, EpisodeRepository episodeRepository) {
         this.id = viewing.getId();
         this.show = showRepository.findOne(viewing.getShowId());
-        this.episode = new EpisodeWithTitle(episodeRepository.findOne(viewing.getEpisodeId()));
+        this.episode = new DetailedEpisode(episodeRepository.findOne(viewing.getEpisodeId()));
         this.updatedAt = viewing.getUpdatedAt();
         this.timecode = viewing.getTimecode();
     }
@@ -45,11 +44,11 @@ public class DetailedViewing {
         this.show = show;
     }
 
-    public EpisodeWithTitle getEpisode() {
+    public DetailedEpisode getEpisode() {
         return episode;
     }
 
-    public void setEpisode(EpisodeWithTitle episode) {
+    public void setEpisode(DetailedEpisode episode) {
         this.episode = episode;
     }
 

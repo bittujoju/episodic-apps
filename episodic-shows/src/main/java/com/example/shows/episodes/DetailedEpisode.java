@@ -5,7 +5,7 @@ package com.example.shows.episodes;
  * Created by trainer11 on 5/18/17.
  */
 
-public class EpisodeWithTitle {
+public class DetailedEpisode {
 
 
     private Long id;
@@ -15,7 +15,7 @@ public class EpisodeWithTitle {
     private Integer episodeNumber;
     private String title;
 
-    public EpisodeWithTitle(Episode episode){
+    public DetailedEpisode(Episode episode){
         this.id = episode.getId();
         this.showId = episode.getShowId();
         this.seasonNumber = episode.getSeasonNumber();

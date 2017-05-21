@@ -20,7 +20,7 @@ public class EpisodeController {
     EpisodeRepository episodeRepository;
 
     @GetMapping("{id}/episodes")
-    public Iterable<EpisodeWithTitle> getEpisodesForShow(@PathVariable Long id) throws Exception{
+    public Iterable<DetailedEpisode> getEpisodesForShow(@PathVariable Long id) throws Exception{
 
         List<Episode> episodes = new ArrayList<>();
 
@@ -29,17 +29,17 @@ public class EpisodeController {
                 return episodes.stream()
                                 .filter(episode -> episode.getShowId() == id)
                                 .map(episode -> {
-                                 EpisodeWithTitle episodeWithTitle = new EpisodeWithTitle(episode);
-                                 return episodeWithTitle;
+                                 DetailedEpisode detailedEpisode = new DetailedEpisode(episode);
+                                 return detailedEpisode;
                 })
                 .collect(toList());
     }
 
     @PostMapping("{id}/episodes")
-    public EpisodeWithTitle createEpisode(@RequestBody Episode episode, @PathVariable Long id) throws Exception {
+    public DetailedEpisode createEpisode(@RequestBody Episode episode, @PathVariable Long id) throws Exception {
         episode.setShowId(id);
         this.episodeRepository.save(episode);
-        EpisodeWithTitle episodeWithTitle = new EpisodeWithTitle(episode);
-        return episodeWithTitle;
+        DetailedEpisode detailedEpisode = new DetailedEpisode(episode);
+        return detailedEpisode;
     }
 }
