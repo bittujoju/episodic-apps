@@ -1,5 +1,7 @@
-package com.example.users;
+package com.example.shows.episodes;
 
+import com.example.shows.Show;
+import com.example.shows.ShowRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,72 +16,86 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Created by trainer11 on 5/17/17.
+ * Created by trainer11 on 5/21/17.
  */
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UsersControllerTest {
-
+public class EpisodesControllerTest {
     @Autowired
     MockMvc mvc;
 
     @Autowired
-    UserRepository userRepository;
+    EpisodeRepository episodeRepository;
+
+    @Autowired
+    ShowRepository showRepository;
 
     @Before
     public void setup(){
-        userRepository.deleteAll();
+        episodeRepository.deleteAll();
     }
 
     @Test
     @Rollback
     @Transactional
-    public void usersGetPostTest() throws Exception {
+    public void showsGetPostTest() throws Exception {
+        Show show = new Show();
+        show.setName("Spartacus");
+        showRepository.save(show);
 
-        Long count = userRepository.count();
+        List<Show> shows = new ArrayList();
+        showRepository.findAll()
+                .forEach(shows::add);
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        Map<String, Object> payload = new HashMap<String, Object>(){
+        Map<String, Object> payload = new HashMap<String, Object>() {
             {
-                put("email", "joe8@example.com");
+                put("seasonNumber", "1");
+                put("episodeNumber", "5");
             }
         };
+
+        ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(payload);
 
-        MockHttpServletRequestBuilder request1 = post("/users")
+        MockHttpServletRequestBuilder request1 = post("/shows/" + shows.get(0).getId() + "/episodes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(json);
 
         mvc.perform(request1)
                 .andExpect(status().isOk())
-                .andExpect((jsonPath("$.id", notNullValue())));
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.seasonNumber", equalTo(1)))
+                .andExpect(jsonPath("$.episodeNumber", equalTo(5)))
+                .andExpect(jsonPath("$.title", equalTo("S1 E5")));
 
-        assertThat(userRepository.count(), equalTo(count+1));
+        assertThat(episodeRepository.count(), equalTo(1L));
 
-        MockHttpServletRequestBuilder request2 = get("/users")
+        MockHttpServletRequestBuilder request2 = get("/shows/" + shows.get(0).getId() + "/episodes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(json);
 
         mvc.perform(request2)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", notNullValue()));
+                .andExpect(jsonPath("$[0].id", notNullValue()))
+                .andExpect(jsonPath("$[0].seasonNumber", equalTo(1)))
+                .andExpect(jsonPath("$[0].episodeNumber", equalTo(5)))
+                .andExpect(jsonPath("$[0].title", equalTo("S1 E5")));
     }
 }
