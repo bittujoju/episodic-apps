@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +45,6 @@ public class EventControllerTest {
     }
 
     @Test
-    @Rollback
-    @Transactional
     public void eventsGetPostTest() throws Exception {
 
         Long count = eventRepository.count();
@@ -74,7 +70,7 @@ public class EventControllerTest {
 
         mvc.perform(request1)
                 .andExpect(status().isOk())
-                .andExpect((jsonPath("$.id", notNullValue())));
+                .andExpect((jsonPath("$.type", notNullValue())));
 
         assertThat(eventRepository.count(), equalTo(count+1));
 
@@ -85,7 +81,6 @@ public class EventControllerTest {
 
         mvc.perform(request2)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].type", equalTo("play")));
+                .andExpect(jsonPath("$.content[0].type", equalTo("play")));
     }
-
 }

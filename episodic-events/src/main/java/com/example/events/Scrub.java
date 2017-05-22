@@ -1,7 +1,6 @@
 package com.example.events;
 
-import com.example.data.DetailedData;
-import lombok.AllArgsConstructor;
+import com.example.data.DataWithOffset;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,13 +13,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Scrub extends Event {
 
-    private DetailedData data;
+    private DataWithOffset data;
 
-    public Scrub(DetailedData data) {
+    public Scrub(DataWithOffset data) {
         this.data = data;
     }
 
-    public Scrub(Long userId, Long showId, Long episodeId, String createdAt, DetailedData data) {
+    public Scrub(Long userId, Long showId, Long episodeId, String createdAt, DataWithOffset data) {
         super(userId, showId, episodeId, createdAt);
         this.data = data;
     }

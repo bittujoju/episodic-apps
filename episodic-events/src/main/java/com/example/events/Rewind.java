@@ -1,6 +1,6 @@
 package com.example.events;
 
-import com.example.data.DetailedData;
+import com.example.data.DataWithSpeed;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +15,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Rewind extends Event {
 
-    private DetailedData data;
+    private DataWithSpeed data;
 
-    public Rewind(DetailedData data) {
+    public Rewind(DataWithSpeed data) {
         this.data = data;
     }
 
-    public Rewind(Long userId, Long showId, Long episodeId, String createdAt, DetailedData data) {
+    public Rewind(Long userId, Long showId, Long episodeId, String createdAt, DataWithSpeed data) {
         super(userId, showId, episodeId, createdAt);
         this.data = data;
     }

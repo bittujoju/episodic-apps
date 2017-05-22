@@ -1,6 +1,6 @@
 package com.example.events;
 
-import com.example.data.DetailedData;
+import com.example.data.DataWithSpeed;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,17 +14,17 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FastForward extends Event {
 
-    private DetailedData data;
+    private DataWithSpeed data;
 
     public String getType() {
         return "fastForward";
     }
 
-    public FastForward(DetailedData data) {
+    public FastForward(DataWithSpeed data) {
         this.data = data;
     }
 
-    public FastForward(Long userId, Long showId, Long episodeId, String createdAt, DetailedData data) {
+    public FastForward(Long userId, Long showId, Long episodeId, String createdAt, DataWithSpeed data) {
 
         super(userId, showId, episodeId, createdAt);
         this.data = data;

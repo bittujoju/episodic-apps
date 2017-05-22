@@ -10,10 +10,6 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class DetailedData {
-
-
-    private Integer startOffset;
-    private Integer endOffset;
+public class DataWithSpeed extends DataWithOffset{
     private Double speed;
 }
