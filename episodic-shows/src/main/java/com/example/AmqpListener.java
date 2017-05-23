@@ -39,7 +39,7 @@ public class AmqpListener implements RabbitListenerConfigurer {
     UserRepository userRepository;
 
     @Transactional
-    @RabbitListener(queues = "my-queue")
+    @RabbitListener(queues = "episodic-progress")
     public void receiveMessage(final EpisodicProgress episodicProgress) {
         Viewing viewing = new Viewing();
         List<Viewing> viewings = new ArrayList<>();
