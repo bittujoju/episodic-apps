@@ -1,5 +1,7 @@
 package com.example.viewings;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +25,7 @@ public class Viewing {
     private Long episodeId;
     private Timestamp updatedAt;
     private Integer timecode;
+
 
     public Viewing(Long userId, Long showId, Long episodeId, Timestamp updatedAt, Integer timecode) {
         this.userId = userId;
