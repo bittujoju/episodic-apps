@@ -1,10 +1,13 @@
 package com.example.events;
 
+import com.example.ProgressMessage;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import sun.net.ProgressEvent;
 
 import java.util.Map;
 
@@ -19,6 +22,8 @@ public class EventController {
     @Autowired
     EventRepository eventRepository;
 
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @GetMapping("recent")
     public Page<Event> getEvents() {
@@ -27,6 +32,18 @@ public class EventController {
 
     @PostMapping("")
     public Object createProduct(@RequestBody Event event) {
-        return eventRepository.save(event);
+
+        if(event.getType().equalsIgnoreCase("progress")){
+            Progress progressEvent = (Progress)event;
+
+            rabbitTemplate.convertAndSend("my-exchange", "my-routing-key", new ProgressMessage(
+                    progressEvent.getUserId(),
+                    progressEvent.getEpisodeId(),
+                    progressEvent.getCreatedAt(),
+                    progressEvent.getData().getOffset()
+            ));
+        }
+
+        return this.eventRepository.save(event);
     }
 }
